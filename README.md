@@ -323,3 +323,7 @@ Thrown when there is an error making the request.
 
 ## Credits
 This wrapper is built for the [Spiget API](https://spiget.org/) created by the [SpiGetOrg team](https://github.com/SpiGetOrg).
+
+## License
+
+MIT License - see LICENSE file for details
