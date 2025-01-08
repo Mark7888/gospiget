@@ -16,14 +16,14 @@ func TestClient(t *testing.T) {
 	t.Log("API Status:", status)
 
 	// Test GetResources
-	params := map[string]string{"size": "1"}
+	params := map[string]string{"size": "20"}
 	resources, err := c.GetResources(params)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, resources)
 	t.Log("Resources:", resources)
 
 	if len(resources) > 0 {
-		resourceID := resources[0].ID
+		resourceID := resources[len(resources)-1].ID
 
 		// Test GetResourceByID
 		resource, err := c.GetResourceByID(resourceID)
@@ -51,6 +51,10 @@ func TestClient(t *testing.T) {
 			assert.NoError(t, err)
 			assert.NotNil(t, latestVersion)
 			t.Log("Latest Resource Version:", latestVersion)
+
+			// Test DownloadResourceVersion
+			err = c.DownloadResourceVersion(*latestVersion, "./misc/test_download.jar", true)
+			assert.NoError(t, err)
 		}
 
 		// Test GetResourceUpdates

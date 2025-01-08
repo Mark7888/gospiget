@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -326,4 +327,35 @@ func (c *Client) SearchAuthors(query string, params map[string]string) ([]Author
 		return nil, &UnmarshalError{Message: err.Error()}
 	}
 	return authors, nil
+}
+
+func (c *Client) DownloadResourceVersion(resource ResourceVersion, path string, proxy bool) error {
+	var url string
+	if proxy {
+		url = fmt.Sprintf("/resources/%d/versions/%d/download/proxy", resource.ResourceId, resource.ID)
+	} else {
+		url = fmt.Sprintf("/resources/%d/versions/%d/download", resource.ResourceId, resource.ID)
+	}
+
+	resp, err := c.restyClient.R().Get(url)
+	if err != nil {
+		return &RequestError{Message: err.Error()}
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return &UnexpectedStatusCodeError{StatusCode: resp.StatusCode()}
+	}
+
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = file.Write(resp.Body())
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

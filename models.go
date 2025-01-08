@@ -30,6 +30,7 @@ type ResourceRating struct {
 type ResourceVersion struct {
 	BaseModel
 	UUID        string         `json:"uuid"`
+	ResourceId  int            `json:"resource"`
 	Name        string         `json:"name"`
 	ReleaseDate int64          `json:"releaseDate"`
 	Downloads   int            `json:"downloads"`
@@ -69,27 +70,44 @@ type ResourceReview struct {
 	Date            int64          `json:"date"`
 }
 
+// IdReference represents a reference to another object by ID
+type IdReference struct {
+	ID int `json:"id"`
+}
+
+// IdAndUUIDReference represents a reference to another object by ID and UUID
+type IdAndUUIDReference struct {
+	ID   int    `json:"id"`
+	UUID string `json:"uuid"`
+}
+
 // Resource represents the main resource model
 type Resource struct {
 	BaseModel
-	Name           string            `json:"name"`
-	Tag            string            `json:"tag"`
-	Contributors   string            `json:"contributors"`
-	Likes          int               `json:"likes"`
-	File           *ResourceFile     `json:"file"`
-	TestedVersions []string          `json:"testedVersions"`
-	Links          map[string]string `json:"links"`
-	Rating         *ResourceRating   `json:"rating"`
-	ReleaseDate    int64             `json:"releaseDate"`
-	UpdateDate     int64             `json:"updateDate"`
-	Downloads      int               `json:"downloads"`
-	External       bool              `json:"external"`
-	Icon           *Icon             `json:"icon"`
-	Premium        bool              `json:"premium"`
-	Price          float64           `json:"price"`
-	Currency       string            `json:"currency"`
-	Description    string            `json:"description"`
-	Documentation  string            `json:"documentation"`
-	SourceCodeLink string            `json:"sourceCodeLink"`
-	DonationLink   string            `json:"donationLink"`
+	Name           string             `json:"name"`
+	Tag            string             `json:"tag"`
+	Contributors   string             `json:"contributors"`
+	Likes          int                `json:"likes"`
+	File           *ResourceFile      `json:"file"`
+	TestedVersions []string           `json:"testedVersions"`
+	Links          map[string]string  `json:"links"`
+	Rating         *ResourceRating    `json:"rating"`
+	ReleaseDate    int64              `json:"releaseDate"`
+	UpdateDate     int64              `json:"updateDate"`
+	Downloads      int                `json:"downloads"`
+	External       bool               `json:"external"`
+	Icon           *Icon              `json:"icon"`
+	Premium        bool               `json:"premium"`
+	Price          float64            `json:"price"`
+	Currency       string             `json:"currency"`
+	Description    string             `json:"description"`
+	Documentation  string             `json:"documentation"`
+	SourceCodeLink string             `json:"sourceCodeLink"`
+	DonationLink   string             `json:"donationLink"`
+	Author         IdReference        `json:"author"`
+	Category       IdReference        `json:"category"`
+	Version        IdAndUUIDReference `json:"version"`
+	Reviews        []IdReference      `json:"reviews"`
+	Versions       []IdReference      `json:"versions"`
+	Updates        []IdReference      `json:"updates"`
 }
